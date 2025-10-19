@@ -3,59 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Ulasan;
 
 class UlasanController extends Controller
 {
-    private $data = [];
-
-    public function __construct()
-    {
-        // Data dummy ulasan wisata
-        $this->data = [
-            ["id" => 1, "destinasi" => "Pantai Kuta", "warga" => "Budi", "rating" => 5, "komentar" => "Sangat indah!", "waktu" => "2025-09-20"],
-            ["id" => 2, "destinasi" => "Gunung Bromo", "warga" => "Siti", "rating" => 4, "komentar" => "Pemandangannya luar biasa!", "waktu" => "2025-09-21"],
-            ["id" => 3, "destinasi" => "Danau Toba", "warga" => "Andi", "rating" => 5, "komentar" => "Tempatnya keren banget!", "waktu" => "2025-09-22"],
-        ];
-    }
-
-    // tampilkan semua ulasan
     public function index()
     {
-        $ulasan = $this->data;
-        return view('ulasan.index', compact('ulasan'));
+        $ulasans = Ulasan::all();
+        return view('ulasan.index', compact('ulasans'));
     }
 
-    // form tambah
-    public function create()
-    {
-        return view('ulasan.create');
-    }
-
-    // simpan data baru (dummy)
     public function store(Request $request)
     {
-        return redirect()->route('ulasan.index')
-            ->with('success', 'Ulasan berhasil ditambahkan (dummy, belum ke DB)');
-    }
+        $request->validate([
+            'destinasi_id' => 'required|string|max:100',
+            'warga_id' => 'nullable|integer',
+            'rating' => 'required|integer|min:1|max:5',
+            'komentar' => 'required|string',
+            'waktu' => 'required|date',
+        ]);
 
-    // form edit
-    public function edit($id)
-    {
-        $ulasan = collect($this->data)->firstWhere('id', $id);
-        return view('ulasan.edit', compact('ulasan'));
-    }
-
-    // update data dummy
-    public function update(Request $request, $id)
-    {
-        return redirect()->route('ulasan.index')
-            ->with('success', "Ulasan ID $id berhasil diupdate (dummy)");
-    }
-
-    // hapus data dummy
-    public function destroy($id)
-    {
-        return redirect()->route('ulasan.index')
-            ->with('success', "Ulasan ID $id berhasil dihapus (dummy)");
+        Ulasan::create($request->all());
+        return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
     }
 }
