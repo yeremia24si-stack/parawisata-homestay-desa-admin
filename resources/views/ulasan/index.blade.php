@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ulasan Wisata</title>
+    <title>Daftar Ulasan Wisata</title>
 </head>
 <body>
-    <h1>Ulasan Wisata</h1>
+    <h1>Daftar Ulasan Wisata</h1>
 
     @if(session('success'))
         <p style="color: green;">{{ session('success') }}</p>
     @endif
 
-    <form method="POST" action="{{ url('/ulasan') }}">
-        @csrf
-        <input type="text" name="destinasi_id" placeholder="Destinasi ID" required><br>
-        <input type="number" name="warga_id" placeholder="Warga ID"><br>
-        <input type="number" name="rating" placeholder="Rating (1-5)" required><br>
-        <textarea name="komentar" placeholder="Komentar" required></textarea><br>
-        <input type="datetime-local" name="waktu" required><br>
-        <button type="submit">Tambah</button>
-    </form>
-
+    <a href="{{ route('ulasan.create') }}">+ Tambah Ulasan Baru</a>
     <hr>
 
-    <table border="1">
+    <table border="1" cellpadding="6" cellspacing="0">
         <tr>
-            <th>ID</th><th>Destinasi</th><th>Warga</th><th>Rating</th><th>Komentar</th><th>Waktu</th>
+            <th>ID</th>
+            <th>Destinasi ID</th>
+            <th>Warga ID</th>
+            <th>Rating</th>
+            <th>Komentar</th>
+            <th>Waktu</th>
+            <th>Aksi</th>
         </tr>
-        @foreach($ulasans as $u)
+        @forelse($ulasans as $u)
         <tr>
             <td>{{ $u->id }}</td>
             <td>{{ $u->destinasi_id }}</td>
@@ -34,8 +31,19 @@
             <td>{{ $u->rating }}</td>
             <td>{{ $u->komentar }}</td>
             <td>{{ $u->waktu }}</td>
+            <td>
+                <a href="{{ route('ulasan.show', $u->id) }}">Lihat</a> |
+                <a href="{{ route('ulasan.edit', $u->id) }}">Edit</a> |
+                <form action="{{ route('ulasan.destroy', $u->id) }}" method="POST" style="display:inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="return confirm('Yakin hapus ulasan ini?')">Hapus</button>
+                </form>
+            </td>
         </tr>
-        @endforeach
+        @empty
+        <tr><td colspan="7" align="center">Belum ada ulasan.</td></tr>
+        @endforelse
     </table>
 </body>
 </html>
