@@ -61,34 +61,34 @@ Route::get('/about', function () {
 
 
 
-use App\Http\Controllers\AuthController;
+//use App\Http\Controllers\AuthController;
 
 // Halaman login
-Route::get('/auth/login', [AuthController::class, 'index'])->name('auth.login');
-Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login.submit');
+//Route::get('/auth/login', [AuthController::class, 'index'])->name('auth.login');
+//Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login.submit');
 
 // Halaman register
-Route::get('/auth/register', function () {
-    return view('auth.register');
-})->name('auth.register');
-Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register.submit');
+//Route::get('/auth/register', function () {
+  //  return view('auth.register');
+//})->name('auth.register');
+//Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register.submit');
 
 // Halaman berhasil (dashboard)
-Route::get('/auth/berhasil', function () {
-    return view('auth.berhasil');
-})->name('auth.berhasil');
+//Route::get('/auth/berhasil', function () {
+  //  return view('auth.berhasil');
+//})->name('auth.berhasil');
 
 // Redirect root ke login
-Route::get('/', function () {
-    return redirect('/auth/login');
-});
+//Route::get('/', function () {
+  //  return redirect('/auth/login');
+//});
 
 
-use App\Http\Controllers\AdminController;
+//use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\WargaController;
 
-Route::get('/', [AdminController::class, 'index']);
+//Route::get('/', [AdminController::class, 'index']);
 
 // Ulasan Wisata
 Route::get('/ulasan', [UlasanController::class, 'index']);
@@ -98,3 +98,38 @@ Route::post('/ulasan', [UlasanController::class, 'store']);
 Route::get('/warga', [WargaController::class, 'index']);
 Route::post('/warga', [WargaController::class, 'store']);
 Route::delete('/warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy'); // fitur hapus warga
+
+
+
+
+
+
+
+
+
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+
+
+Route::get('/', function(){
+    return redirect()->route('admin.login');
+});
+
+// AUTH (manual)
+Route::get('/admin/login', [AuthController::class,'showLogin'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class,'login'])->name('admin.login.post');
+
+Route::get('/admin/register', [AuthController::class,'showRegister'])->name('admin.register');
+Route::post('/admin/register', [AuthController::class,'register'])->name('admin.register.post');
+
+Route::get('/admin/logout', [AuthController::class,'logout'])->name('admin.logout');
+
+// Protected admin pages (simple, controllers check session in constructor)
+Route::get('/admin/dashboard', [AdminController::class,'dashboard'])->name('admin.dashboard');
+
+// User CRUD
+Route::prefix('admin')->name('admin.')->group(function(){
+    Route::resource('user', UserController::class);
+});
