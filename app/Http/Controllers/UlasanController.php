@@ -10,7 +10,7 @@ class UlasanController extends Controller
     public function index()
     {
         $ulasans = Ulasan::all();
-        return view('ulasan.index', compact('ulasans'));
+        return view('pages.ulasan.index', compact('ulasans'));
     }
 
     public function store(Request $request)

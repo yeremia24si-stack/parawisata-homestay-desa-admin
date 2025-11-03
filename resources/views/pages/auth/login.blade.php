@@ -21,14 +21,14 @@
             <div class="msg" style="color:green;">{{ session('success') }}</div>
         @endif
 
-        <form method="POST" action="{{ route('auth.login.submit') }}">
+        <form method="POST" action="{{ route('pages.auth.login.post') }}">
             @csrf
             <input type="text" name="username" placeholder="Username"><br>
             <input type="password" name="password" placeholder="Password"><br>
             <button type="submit">Login</button>
         </form>
 
-        <p>Belum punya akun? <a href="{{ route('auth.register') }}">Registrasi</a></p>
+        <p>Belum punya akun? <a href="{{ route('pages.auth.register') }}">Registrasi</a></p>
     </div>
 </body>
 </html>

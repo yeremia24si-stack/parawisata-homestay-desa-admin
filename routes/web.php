@@ -1,135 +1,73 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\MahasiswaController;
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
-Route::get('/pcr', function () {
-    return 'Selamat Datang di Website Kampus PCR!';
-});
-
-Route::get('/mahasiswa', function () {
-    return 'Halo Mahasiswa';
-})->name('mahasiswa.show');
-
-Route::get('/nama/{param1}', function ($param1) {
-    return 'Nama saya: '.$param1;
-});
-
-Route::get('/nim/{param1?}', function ($param1 = '') {
-    return 'NIM saya: '.$param1;
-});
-
-Route::get('/mahasiswa/{param1}', [MahasiswaController::class, 'show']);
-
-Route::get('/about', function () {
-    return view('halaman-about');
-});
-
-
-
-//use App\Http\Controllers\UlasanController;
-
-//Route::get('/ulasan', [UlasanController::class, 'index'])->name('ulasan.index');
-//Route::get('/ulasan/create', [UlasanController::class, 'create'])->name('ulasan.create');
-//Route::post('/ulasan/store', [UlasanController::class, 'store'])->name('ulasan.store');
-//Route::get('/ulasan/{id}/edit', [UlasanController::class, 'edit'])->name('ulasan.edit');
-//Route::post('/ulasan/{id}/update', [UlasanController::class, 'update'])->name('ulasan.update');
-//Route::get('/ulasan/{id}/delete', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
-
-
-
-
-
-//use App\Http\Controllers\AuthController;
-
-// Menampilkan halaman login
-//Route::get('/auth', [AuthController::class, 'index']);
-
-// Memproses form login
-//Route::post('/auth/login', [AuthController::class, 'login']);
-
-// Menampilkan halaman berhasil login
-//Route::get('/auth/berhasil', [AuthController::class, 'berhasil']);
-
-
-
-
-
-//use App\Http\Controllers\AuthController;
-
-// Halaman login
-//Route::get('/auth/login', [AuthController::class, 'index'])->name('auth.login');
-//Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login.submit');
-
-// Halaman register
-//Route::get('/auth/register', function () {
-  //  return view('auth.register');
-//})->name('auth.register');
-//Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register.submit');
-
-// Halaman berhasil (dashboard)
-//Route::get('/auth/berhasil', function () {
-  //  return view('auth.berhasil');
-//})->name('auth.berhasil');
-
-// Redirect root ke login
-//Route::get('/', function () {
-  //  return redirect('/auth/login');
-//});
-
-
-//use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UlasanController;
-use App\Http\Controllers\WargaController;
-
-//Route::get('/', [AdminController::class, 'index']);
-
-// Ulasan Wisata
-Route::get('/ulasan', [UlasanController::class, 'index']);
-Route::post('/ulasan', [UlasanController::class, 'store']);
-
-// Data Warga
-Route::get('/warga', [WargaController::class, 'index']);
-Route::post('/warga', [WargaController::class, 'store']);
-Route::delete('/warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy'); // fitur hapus warga
-
-
-
-
-
-
-
-
-
-
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\WargaController;
+use App\Http\Controllers\UlasanController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\AuthController;
+
+/*
+|--------------------------------------------------------------------------
+| WEB ROUTES
+|--------------------------------------------------------------------------
+| Semua route aplikasi web didefinisikan di sini
+| Versi ini sudah dirapikan agar tidak ada duplikasi.
+*/
+
+// ========================
+//  HALAMAN UMUM
+// ========================
+
+// Halaman Welcome Laravel
+Route::get('/', function () {
+    return view('pages.auth.login'); // Halaman utama warga
+})->name('home');
+
+// Halaman tambahan (contoh belajar route)
+Route::get('/pcr', fn() => 'Selamat Datang di Website Kampus PCR!');
+Route::get('/mahasiswa', fn() => 'Halo Mahasiswa')->name('mahasiswa.show');
+Route::get('/nama/{param1}', fn($param1) => 'Nama saya: ' . $param1);
+Route::get('/nim/{param1?}', fn($param1 = '') => 'NIM saya: ' . $param1);
+Route::get('/mahasiswa/{param1}', [MahasiswaController::class, 'show']);
+Route::get('/about', fn() => view('halaman-about'))->name('about');
 
 
-Route::get('/', function(){
-    return redirect()->route('admin.login');
-});
+// ========================
+//  AUTENTIKASI ADMIN
+// ========================
 
-// AUTH (manual)
-Route::get('/admin/login', [AuthController::class,'showLogin'])->name('admin.login');
-Route::post('/admin/login', [AuthController::class,'login'])->name('admin.login.post');
+Route::get('/admin/login', [AuthController::class, 'showLogin'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'login'])->name('pages.auth.login.post');
 
-Route::get('/admin/register', [AuthController::class,'showRegister'])->name('admin.register');
-Route::post('/admin/register', [AuthController::class,'register'])->name('admin.register.post');
+Route::get('/admin/register', [AuthController::class, 'showRegister'])->name('admin.register');
+Route::post('/admin/register', [AuthController::class, 'register'])->name('pages.auth.register.post');
 
-Route::get('/admin/logout', [AuthController::class,'logout'])->name('admin.logout');
+Route::get('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
-// Protected admin pages (simple, controllers check session in constructor)
-Route::get('/admin/dashboard', [AdminController::class,'dashboard'])->name('admin.dashboard');
+// ========================
+//  ADMIN AREA
+// ========================
 
-// User CRUD
-Route::prefix('admin')->name('admin.')->group(function(){
+// Dashboard admin
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+// Modul CRUD User & Warga
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('user', UserController::class);
+    Route::resource('warga', WargaController::class);
 });
+
+// ========================
+//  MODUL ULASAN
+// ========================
+Route::get('/ulasan', [UlasanController::class, 'index'])->name('ulasan.index');
+Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
+
+// ========================
+//  DATA WARGA (Publik)
+// ========================
+Route::get('/warga', [WargaController::class, 'index'])->name('warga.index');
+Route::post('/warga', [WargaController::class, 'store'])->name('warga.store');
+Route::delete('/warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy');

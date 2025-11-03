@@ -7,12 +7,14 @@ use App\Models\Warga;
 
 class WargaController extends Controller
 {
+    // Menampilkan daftar Warga
     public function index()
     {
         $wargas = Warga::all();
-        return view('warga.index', compact('wargas'));
+        return view('pages.warga.index', compact('wargas')); // Path view yang benar
     }
 
+    // Menyimpan data Warga
     public function store(Request $request)
     {
         $request->validate([
@@ -25,12 +27,12 @@ class WargaController extends Controller
         return redirect()->back()->with('success', 'Data warga berhasil ditambahkan!');
     }
 
-        public function destroy($id)
+    // Menghapus data Warga
+    public function destroy($id)
     {
         $warga = Warga::findOrFail($id);
         $warga->delete();
 
         return redirect()->back()->with('success', 'Data warga berhasil dihapus!');
     }
-
 }

@@ -10,7 +10,7 @@
     <p><strong>Alamat:</strong> {{ $warga->alamat }}</p>
     <p><strong>No HP:</strong> {{ $warga->no_hp }}</p>
 
-    <a href="{{ route('warga.edit', $warga->id) }}">Edit</a> |
-    <a href="{{ route('warga.index') }}">Kembali</a>
+    <a href="{{ route('admin.warga.edit', $warga->id) }}">Edit</a> |
+    <a href="{{ route('admin.warga.index') }}">Kembali</a>
 </body>
 </html>

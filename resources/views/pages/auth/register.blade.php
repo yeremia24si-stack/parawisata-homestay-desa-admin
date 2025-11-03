@@ -22,7 +22,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('auth.register.submit') }}">
+        <form method="POST" action="{{ route('pages.auth.register.post') }}">
             @csrf
             <input type="text" name="nama" placeholder="Nama Lengkap"><br>
             <input type="text" name="alamat" placeholder="Alamat"><br>
