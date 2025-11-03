@@ -71,3 +71,6 @@ Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store')
 Route::get('/warga', [WargaController::class, 'index'])->name('warga.index');
 Route::post('/warga', [WargaController::class, 'store'])->name('warga.store');
 Route::delete('/warga/{id}', [WargaController::class, 'destroy'])->name('warga.destroy');
+
+
+//yeremi
