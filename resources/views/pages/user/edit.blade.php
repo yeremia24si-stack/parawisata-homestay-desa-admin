@@ -1,37 +1,14 @@
-@extends('admin.layouts.app')
-
-@section('title', 'Edit User')
+@extends('layouts.admin.app')
 
 @section('content')
-<div class="card shadow-sm p-4">
-    <h5 class="mb-3">Edit Data User</h5>
-    <form>
-        <div class="mb-3">
-            <label>Nama Lengkap</label>
-            <input type="text" class="form-control" value="Admin Desa">
-        </div>
-
-        <div class="mb-3">
-            <label>Email</label>
-            <input type="email" class="form-control" value="admin@desa.test">
-        </div>
-
-        <div class="mb-3">
-            <label>Peran</label>
-            <select class="form-select">
-                <option value="admin" selected>Admin</option>
-                <option value="petugas">Petugas</option>
-                <option value="warga">Warga</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label>Password Baru (opsional)</label>
-            <input type="password" class="form-control" placeholder="Isi jika ingin ganti password">
-        </div>
-
-        <button class="btn btn-primary">Perbarui</button>
-        <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
+<div class="container mt-4">
+    <h3>Edit User</h3>
+    <form action="{{ route('user.update', $user->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <input type="text" name="name" class="form-control mb-2" value="{{ $user->name }}">
+        <input type="email" name="email" class="form-control mb-2" value="{{ $user->email }}">
+        <button type="submit" class="btn btn-success">Update</button>
     </form>
 </div>
 @endsection

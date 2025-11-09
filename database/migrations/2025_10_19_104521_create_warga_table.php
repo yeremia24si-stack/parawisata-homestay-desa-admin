@@ -5,19 +5,22 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('warga', function (Blueprint $table) {
-            $table->id();
+            $table->id('warga_id');
+            $table->string('no_ktp')->unique();
             $table->string('nama');
-            $table->string('alamat');
-            $table->string('no_hp', 15);
+            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan']);
+            $table->string('agama');
+            $table->string('pekerjaan');
+            $table->string('telp');
+            $table->string('email');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('warga');
     }
 };

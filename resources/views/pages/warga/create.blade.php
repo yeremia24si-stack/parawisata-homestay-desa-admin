@@ -1,37 +1,42 @@
-@extends('admin.layouts.app')
-
-@section('title', 'Tambah Warga')
+@extends('layouts.admin.app')
 
 @section('content')
-<div class="card shadow-sm p-4">
-    <h5 class="mb-3">Tambah Data Warga</h5>
-    <form>
+<div class="container mt-4">
+    <h3>Tambah Warga</h3>
+    <form action="{{ route('warga.store') }}" method="POST">
+        @csrf
         <div class="mb-3">
-            <label>Nama Warga</label>
-            <input type="text" class="form-control" placeholder="Masukkan nama warga">
+            <label>No KTP</label>
+            <input type="text" name="no_ktp" class="form-control" required>
         </div>
-
         <div class="mb-3">
-            <label>Alamat</label>
-            <input type="text" class="form-control" placeholder="Masukkan alamat warga">
+            <label>Nama</label>
+            <input type="text" name="nama" class="form-control" required>
         </div>
-
         <div class="mb-3">
-            <label>No HP</label>
-            <input type="text" class="form-control" placeholder="Masukkan nomor HP">
-        </div>
-
-        <div class="mb-3">
-            <label>Status</label>
-            <select class="form-select">
-                <option value="">-- Pilih Status --</option>
-                <option value="aktif">Aktif</option>
-                <option value="tidak_aktif">Tidak Aktif</option>
+            <label>Jenis Kelamin</label>
+            <select name="jenis_kelamin" class="form-control">
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
             </select>
         </div>
-
-        <button class="btn btn-success">Simpan</button>
-        <a href="{{ route('admin.warga.index') }}" class="btn btn-secondary">Kembali</a>
+        <div class="mb-3">
+            <label>Agama</label>
+            <input type="text" name="agama" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label>Pekerjaan</label>
+            <input type="text" name="pekerjaan" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label>Telp</label>
+            <input type="text" name="telp" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
 </div>
 @endsection

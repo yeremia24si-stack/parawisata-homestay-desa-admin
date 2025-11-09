@@ -3,18 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-// (not extending Authenticatable because auth is manual here)
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name','email','password','position','department','phone','status'
+        'name',
+        'email',
+        'password',
+        'role'
     ];
 
     protected $hidden = [
-        'password','remember_token'
+        'password',
+        'remember_token',
     ];
+
+    public function warga()
+    {
+        return $this->hasOne(Warga::class, 'user_id');
+    }
+
+    public function ulasan()
+    {
+        return $this->hasMany(Ulasan::class, 'user_id');
+    }
 }

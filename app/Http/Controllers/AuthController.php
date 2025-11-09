@@ -3,74 +3,115 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class AuthController extends Controller
 {
-    // show login
-    public function showLogin()
+    // Menampilkan halaman login
+    public function showLoginForm()
     {
+        // Jika sudah login, redirect ke dashboard
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
         return view('pages.auth.login');
     }
 
-    // process login
+    // Proses login
     public function login(Request $request)
     {
-        $request->validate([
+        // Validasi input
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|min:6',
+        ], [
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 6 karakter',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return back()->withErrors(['email' => 'Email tidak ditemukan'])->withInput();
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        if (!Hash::check($request->password, $user->password)) {
-            return back()->withErrors(['password' => 'Password salah'])->withInput();
+        // Cek kredensial
+        $credentials = $request->only('email', 'password');
+        
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('dashboard'))
+                ->with('success', 'Selamat datang, ' . Auth::user()->name);
         }
 
-        // sukses -> set session
-        session()->put('admin_id', $user->id);
-        session()->put('admin_name', $user->name);
-        return redirect()->route('admin.dashboard')->with('success', 'Login berhasil');
+        return redirect()->back()
+            ->withErrors(['email' => 'Email atau password salah'])
+            ->withInput($request->only('email'));
     }
 
-    // show register
-    public function showRegister()
+    // Menampilkan halaman register
+    public function showRegisterForm()
     {
+        // Jika sudah login, redirect ke dashboard
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
         return view('pages.auth.register');
     }
 
-    // process register
+    // Proses register
     public function register(Request $request)
     {
-        $request->validate([
+        // Validasi input
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => ['required','email','max:255', Rule::unique('users','email')],
-            'password' => 'required|confirmed|min:6'
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+        ], [
+            'name.required' => 'Nama lengkap wajib diisi',
+            'name.max' => 'Nama lengkap maksimal 255 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
+            'email.unique' => 'Email sudah terdaftar',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 6 karakter',
+            'password.confirmed' => 'Konfirmasi password tidak cocok',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Buat user baru
         $user = User::create([
             'name' => $request->name,
-            'email'=> $request->email,
-            'password'=> Hash::make($request->password),
-            // optional fields left null
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
 
-        session()->put('admin_id', $user->id);
-        session()->put('admin_name', $user->name);
+        // Auto login setelah register
+        Auth::login($user);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Registrasi berhasil');
+        return redirect()->route('dashboard')
+            ->with('success', 'Registrasi berhasil! Selamat datang, ' . $user->name);
     }
 
-    // logout
-    public function logout()
+    // Proses logout
+    public function logout(Request $request)
     {
-        session()->forget(['admin_id','admin_name']);
-        session()->flush();
-        return redirect()->route('admin.login')->with('success', 'Logout berhasil');
+        Auth::logout();
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect()->route('login')
+            ->with('success', 'Anda berhasil logout');
     }
 }

@@ -1,3 +1,3 @@
-<footer class="text-center mt-4">
-    <p class="text-muted small">© 2025 Bina Desa - Parawisata Homestay</p>
+<footer class="text-center py-3 border-top">
+    <small>&copy; 2025 Parawisata Homestay Desa | All Rights Reserved</small>
 </footer>

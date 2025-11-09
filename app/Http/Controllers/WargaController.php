@@ -2,37 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Warga;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class WargaController extends Controller
 {
-    // Menampilkan daftar Warga
     public function index()
     {
-        $wargas = Warga::all();
-        return view('pages.warga.index', compact('wargas')); // Path view yang benar
+        $warga = Warga::with('user')->get();
+        return view('layouts.admin.warga.index', compact('warga'));
     }
 
-    // Menyimpan data Warga
+    public function create()
+    {
+        $users = User::all();
+        return view('layouts.admin.warga.create', compact('users'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:100',
-            'alamat' => 'required|string',
-            'no_hp' => 'required|string|max:15',
+            'no_ktp'=>'required|unique:warga',
+            'nama'=>'required',
+            'jenis_kelamin'=>'required',
+            'agama'=>'required',
+            'pekerjaan'=>'required',
+            'telp'=>'required',
+            'email'=>'required|email',
+            'user_id'=>'required'
         ]);
 
         Warga::create($request->all());
-        return redirect()->back()->with('success', 'Data warga berhasil ditambahkan!');
+        return redirect()->route('warga.index')->with('success','Data warga berhasil ditambahkan');
     }
 
-    // Menghapus data Warga
-    public function destroy($id)
+    public function edit($id)
     {
         $warga = Warga::findOrFail($id);
-        $warga->delete();
+        $users = User::all();
+        return view('layouts.admin.warga.edit', compact('warga','users'));
+    }
 
-        return redirect()->back()->with('success', 'Data warga berhasil dihapus!');
+    public function update(Request $request, $id)
+    {
+        $warga = Warga::findOrFail($id);
+        $warga->update($request->all());
+        return redirect()->route('warga.index')->with('success','Data warga berhasil diupdate');
+    }
+
+    public function destroy($id)
+    {
+        Warga::destroy($id);
+        return redirect()->route('warga.index')->with('success','Data warga berhasil dihapus');
     }
 }

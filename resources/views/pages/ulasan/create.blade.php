@@ -1,40 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tambah Ulasan Baru</title>
-</head>
-<body>
-    <h1>Tambah Ulasan Wisata</h1>
+@extends('layouts.admin.app')
 
-    @if($errors->any())
-        <ul style="color: red;">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
-
-    <form method="POST" action="{{ route('ulasan.store') }}">
+@section('content')
+<div class="container mt-4">
+    <h3>Tambah Ulasan</h3>
+    <form action="{{ route('ulasan.store') }}" method="POST">
         @csrf
-        <label>Destinasi ID:</label><br>
-        <input type="text" name="destinasi_id" value="{{ old('destinasi_id') }}" required><br><br>
-
-        <label>Warga ID:</label><br>
-        <input type="number" name="warga_id" value="{{ old('warga_id') }}"><br><br>
-
-        <label>Rating (1-5):</label><br>
-        <input type="number" name="rating" min="1" max="5" value="{{ old('rating') }}" required><br><br>
-
-        <label>Komentar:</label><br>
-        <textarea name="komentar" required>{{ old('komentar') }}</textarea><br><br>
-
-        <label>Waktu:</label><br>
-        <input type="datetime-local" name="waktu" value="{{ old('waktu') }}" required><br><br>
-
-        <button type="submit">Simpan</button>
+        <div class="mb-3">
+            <label>Warga</label>
+            <select name="warga_id" class="form-control">
+                @foreach($warga as $w)
+                    <option value="{{ $w->warga_id }}">{{ $w->nama }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Rating</label>
+            <input type="number" name="rating" class="form-control" min="1" max="5">
+        </div>
+        <div class="mb-3">
+            <label>Komentar</label>
+            <textarea name="komentar" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
-
-    <br>
-    <a href="{{ route('ulasan.index') }}">← Kembali</a>
-</body>
-</html>
+</div>
+@endsection

@@ -1,49 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Daftar Ulasan Wisata</title>
-</head>
-<body>
-    <h1>Daftar Ulasan Wisata</h1>
+@extends('layouts.admin.app')
 
-    @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
-
-    <a href="{{ route('ulasan.create') }}">+ Tambah Ulasan Baru</a>
-    <hr>
-
-    <table border="1" cellpadding="6" cellspacing="0">
-        <tr>
-            <th>ID</th>
-            <th>Destinasi ID</th>
-            <th>Warga ID</th>
-            <th>Rating</th>
-            <th>Komentar</th>
-            <th>Waktu</th>
-            <th>Aksi</th>
-        </tr>
-        @forelse($ulasans as $u)
-        <tr>
-            <td>{{ $u->id }}</td>
-            <td>{{ $u->destinasi_id }}</td>
-            <td>{{ $u->warga_id }}</td>
-            <td>{{ $u->rating }}</td>
-            <td>{{ $u->komentar }}</td>
-            <td>{{ $u->waktu }}</td>
-            <td>
-                <a href="{{ route('ulasan.show', $u->id) }}">Lihat</a> |
-                <a href="{{ route('ulasan.edit', $u->id) }}">Edit</a> |
-                <form action="{{ route('ulasan.destroy', $u->id) }}" method="POST" style="display:inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="return confirm('Yakin hapus ulasan ini?')">Hapus</button>
-                </form>
-            </td>
-        </tr>
-        @empty
-        <tr><td colspan="7" align="center">Belum ada ulasan.</td></tr>
-        @endforelse
+@section('content')
+<div class="container mt-4">
+    <h3>Data Ulasan Wisata</h3>
+    <a href="{{ route('ulasan.create') }}" class="btn btn-primary mb-3">+ Tambah Ulasan</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Warga</th>
+                <th>Rating</th>
+                <th>Komentar</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($ulasan as $u)
+                <tr>
+                    <td>{{ $u->id }}</td>
+                    <td>{{ $u->warga->nama }}</td>
+                    <td>{{ $u->rating }}</td>
+                    <td>{{ $u->komentar }}</td>
+                    <td>
+                        <a href="{{ route('ulasan.show', $u->id) }}" class="btn btn-info btn-sm">Lihat</a>
+                        <a href="{{ route('ulasan.edit', $u->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
-</body>
-</html>
+</div>
+@endsection
