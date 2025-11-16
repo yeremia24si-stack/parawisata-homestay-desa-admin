@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') | Parawisata Homestay Desa</title>
-    @include('admin.layouts.css')
+    <title>@yield('title', 'Dashboard') - Parawisata Homestay Desa</title>
+
+    {{-- Memanggil semua file CSS --}}
+    @include('layouts.admin.css')
 </head>
-<body class="bg-light">
-    {{-- Top Bar --}}
-    @include('admin.layouts.topbar')
 
-    {{-- Main Content --}}
-    <main class="container mt-4 mb-5">
-        @yield('content')
-    </main>
+<body>
+    <div id="app">
+        {{-- Memanggil Sidebar --}}
+        @include('layouts.admin.sidebar')
 
-    {{-- Footer --}}
-    @include('admin.layouts.footer')
-    @include('admin.layouts.js')
+        {{-- Konten Utama --}}
+        <div id="main">
+            {{-- Memanggil Header (Tombol Burger) --}}
+            @include('layouts.admin.header')
 
+            {{-- Ini adalah tempat konten halaman (dashboard, tabel, form) akan dimuat --}}
+            @yield('content')
 
-    <a href="https://wa.me/6281234567890"
-        class="btn btn-success rounded-circle shadow-lg"
-        style="position: fixed; bottom: 25px; right: 25px; width: 55px; height: 55px;
-               display: flex; align-items: center; justify-content: center; z-index: 1000;"
-        target="_blank" title="Hubungi Admin via WhatsApp">
-        <i class="fa-brands fa-whatsapp fa-xl"></i>
-    </a>
+            {{-- Memanggil Footer --}}
+            @include('layouts.admin.footer')
+        </div>
+    </div>
+
+    {{-- Memanggil semua file JS --}}
+    @include('layouts.admin.js')
 </body>
+
 </html>

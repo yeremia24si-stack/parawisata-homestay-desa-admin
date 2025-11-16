@@ -45,3 +45,13 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('user', UserController::class);
 Route::resource('warga', WargaController::class);
 Route::resource('ulasan', UlasanController::class);
+
+
+
+
+use App\Http\Controllers\DestinasiController;
+
+Route::resource('destinasi', DestinasiController::class);
+
+
+Route::view('/dashboard', 'pages.dashboard');

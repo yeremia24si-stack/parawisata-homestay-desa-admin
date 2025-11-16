@@ -1,5 +1,5 @@
-<nav class="navbar navbar-light bg-light shadow-sm">
-  <div class="container-fluid">
-    <span class="navbar-brand mb-0 h4">Dashboard Parawisata Homestay</span>
-  </div>
-</nav>
+<header class="mb-3">
+    <a href="#" class="burger-btn d-block d-xl-none">
+        <i class="bi bi-justify fs-3"></i>
+    </a>
+</header>

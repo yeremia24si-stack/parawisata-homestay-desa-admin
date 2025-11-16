@@ -12,14 +12,14 @@ class UlasanController extends Controller
     public function index()
     {
         $ulasan = Ulasan::with(['warga','user'])->get();
-        return view('layouts.admin.ulasan.index', compact('ulasan'));
+        return view('pages.ulasan.index', compact('ulasan'));
     }
 
     public function create()
     {
         $warga = Warga::all();
         $users = User::all();
-        return view('layouts.admin.ulasan.create', compact('warga','users'));
+        return view('pages.ulasan.create', compact('warga','users'));
     }
 
     public function store(Request $request)
@@ -41,7 +41,7 @@ class UlasanController extends Controller
         $ulasan = Ulasan::findOrFail($id);
         $warga = Warga::all();
         $users = User::all();
-        return view('layouts.admin.ulasan.edit', compact('ulasan','warga','users'));
+        return view('pages.ulasan.edit', compact('ulasan','warga','users'));
     }
 
     public function update(Request $request, $id)
