@@ -21,8 +21,12 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Ulasan Wisata</li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Ulasan Wisata
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -58,23 +62,22 @@
                         </thead>
 
                         <tbody>
-
                             @forelse ($ulasan as $u)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    {{-- NOMOR URUT PAGINATION --}}
+                                    <td>{{ $ulasan->firstItem() + $loop->index }}</td>
                                     <td>{{ $u->warga->nama }}</td>
                                     <td>{{ $u->rating }}</td>
                                     <td>{{ Str::limit($u->komentar, 60) }}</td>
 
                                     <td>
-
                                         <a href="{{ route('ulasan.show', $u->id) }}"
-                                            class="btn btn-info btn-sm" title="Detail">
+                                           class="btn btn-info btn-sm" title="Detail">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
 
                                         <a href="{{ route('ulasan.edit', $u->id) }}"
-                                            class="btn btn-warning btn-sm" title="Edit">
+                                           class="btn btn-warning btn-sm" title="Edit">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
 
@@ -84,25 +87,28 @@
                                             @csrf
                                             @method('DELETE')
 
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
+                                            <button type="submit"
+                                                    class="btn btn-danger btn-sm"
+                                                    title="Hapus">
                                                 <i class="bi bi-trash-fill"></i>
                                             </button>
                                         </form>
-
                                     </td>
                                 </tr>
-
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted">Tidak ada data.</td>
+                                    <td colspan="5" class="text-center text-muted">
+                                        Tidak ada data.
+                                    </td>
                                 </tr>
                             @endforelse
-
                         </tbody>
-
                     </table>
                 </div>
-
+            </div>
+            {{-- pagination di luar table --}}
+            <div class="d-flex justify-content-end mt-3">
+                {{ $ulasan->links('pagination::bootstrap-5') }}
             </div>
 
         </div>
@@ -113,10 +119,5 @@
 @endsection
 
 @push('js')
-    {{-- Tambahkan JS jika butuh Datatables --}}
-    {{-- <script>
-        $(document).ready(function() {
-            $('#table-data').DataTable();
-        });
-    </script> --}}
+    {{-- JS tetap, tidak diubah --}}
 @endpush

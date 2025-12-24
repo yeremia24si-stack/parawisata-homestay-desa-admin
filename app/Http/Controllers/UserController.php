@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::latest()->paginate(10);
         return view('pages.user.index', compact('users'));
     }
 
@@ -21,20 +22,26 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|min:6',
-            'role'=>'required'
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role' => 'required|in:super admin,admin,user'
         ]);
 
         User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password),
-            'role'=>$request->role
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role
         ]);
 
-        return redirect()->route('user.index')->with('success','User berhasil ditambahkan');
+        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan');
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return view('pages.user.show', compact('user'));
     }
 
     public function edit($id)
@@ -46,7 +53,25 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $user->update($request->all());
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required|in:super admin,admin,user',
+            'password' => 'nullable|min:6'
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+
+        // Update password hanya jika diisi
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
         return redirect()->route('user.index')->with('success', 'User berhasil diupdate');
     }
 

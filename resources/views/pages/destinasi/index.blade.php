@@ -105,11 +105,10 @@
 
                     </table>
                 </div>
-
-                {{-- Pagination jika diperlukan --}}
-                <div class="mt-3">
-                    {{-- {{ $data->links() }} --}}
-                </div>
+                {{-- pagination di luar table --}}
+            <div class="d-flex justify-content-end mt-3">
+                {{ $data->links('pagination::bootstrap-5') }}
+            </div>
 
             </div>
         </div>

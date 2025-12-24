@@ -9,7 +9,7 @@ class DestinasiController extends Controller
 {
     public function index()
     {
-        $data = Destinasi::latest()->get();
+        $data = Destinasi::latest()->paginate(10);
         return view('pages.destinasi.index', compact('data'));
     }
 

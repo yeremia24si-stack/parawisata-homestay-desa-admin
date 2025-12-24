@@ -110,7 +110,9 @@
                         </tbody>
                     </table>
                 </div>
-
+                {{-- pagination di luar table --}}
+            <div class="d-flex justify-content-end mt-3">
+                {{ $warga->links('pagination::bootstrap-5') }}
             </div>
 
         </div>

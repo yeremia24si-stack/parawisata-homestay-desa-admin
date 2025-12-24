@@ -45,6 +45,14 @@
 
             <div class="card-body">
 
+                {{-- Alert Success --}}
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 <div class="table-responsive">
                     <table class="table table-striped table-hover" id="table-data">
                         <thead>
@@ -64,7 +72,17 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $u->name }}</td>
                                     <td>{{ $u->email }}</td>
-                                    <td>{{ ucfirst($u->role) }}</td>
+                                    <td>
+                                        @if($u->role == 'super admin')
+                                            <span class="badge bg-danger">Super Admin</span>
+                                        @elseif($u->role == 'admin')
+                                            <span class="badge bg-warning">Admin</span>
+                                        @elseif($u->role == 'user')
+                                            <span class="badge bg-info">User</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ ucfirst($u->role) }}</span>
+                                        @endif
+                                    </td>
 
                                     <td>
 
@@ -102,7 +120,9 @@
 
                     </table>
                 </div>
-
+                    {{-- pagination di luar table --}}
+            <div class="d-flex justify-content-end mt-3">
+                {{ $users->links('pagination::bootstrap-5') }}
             </div>
 
         </div>

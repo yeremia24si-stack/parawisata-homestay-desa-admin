@@ -44,7 +44,7 @@
                                        class="form-control @error('name') is-invalid @enderror" 
                                        id="name" 
                                        name="name" 
-                                       value="{{ $user->name }}" 
+                                       value="{{ old('name', $user->name) }}" 
                                        required>
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -58,9 +58,40 @@
                                        class="form-control @error('email') is-invalid @enderror" 
                                        id="email" 
                                        name="email" 
-                                       value="{{ $user->email }}" 
+                                       value="{{ old('email', $user->email) }}" 
                                        required>
                                 @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- ROLE --}}
+                            <div class="form-group mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select id="role" 
+                                        name="role" 
+                                        class="form-select @error('role') is-invalid @enderror" 
+                                        required>
+                                    <option value="">-- Pilih Role --</option>
+                                    <option value="super admin" {{ old('role', $user->role) == 'super admin' ? 'selected' : '' }}>Super Admin</option>
+                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
+                                </select>
+                                @error('role')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- PASSWORD --}}
+                            <div class="form-group mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" 
+                                       class="form-control @error('password') is-invalid @enderror" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Kosongkan jika tidak ingin mengubah password">
+                                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah password</small>
+                                @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

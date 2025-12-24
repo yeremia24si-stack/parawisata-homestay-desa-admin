@@ -8,6 +8,8 @@
 
     {{-- Memanggil semua file CSS --}}
     @include('layouts.admin.css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 </head>
 
 <body>

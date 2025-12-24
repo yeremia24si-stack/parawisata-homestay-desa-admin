@@ -52,7 +52,25 @@
                     </tr>
                     <tr>
                         <th>Role</th>
-                        <td>{{ $user->role ?? '-' }}</td>
+                        <td>
+                            @if($user->role == 'super admin')
+                                <span class="badge bg-danger">Super Admin</span>
+                            @elseif($user->role == 'admin')
+                                <span class="badge bg-warning">Admin</span>
+                            @elseif($user->role == 'user')
+                                <span class="badge bg-info">User</span>
+                            @else
+                                <span class="badge bg-secondary">{{ ucfirst($user->role) }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Dibuat Pada</th>
+                        <td>{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Terakhir Diupdate</th>
+                        <td>{{ $user->updated_at ? $user->updated_at->format('d/m/Y H:i') : '-' }}</td>
                     </tr>
                 </table>
 
