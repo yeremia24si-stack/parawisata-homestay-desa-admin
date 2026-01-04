@@ -8,11 +8,20 @@ use Illuminate\Http\Request;
 
 class WargaController extends Controller
 {
-    public function index()
-    {
-        $warga = Warga::with('user')->paginate(10);
-        return view('pages.warga.index', compact('warga'));
+public function index(Request $request)
+{
+    $query = Warga::query();
+
+    if ($request->search) {
+        $query->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('no_ktp', 'like', '%' . $request->search . '%');
     }
+
+    $warga = $query->paginate(10)->withQueryString();
+
+    return view('pages.warga.index', compact('warga'));
+}
+
 
     public function create()
     {

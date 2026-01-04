@@ -38,6 +38,25 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     @endif
+                <form method="GET" class="row g-2 mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="search" class="form-control"
+                            placeholder="Cari nama pemesan..." value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <select name="status" class="form-select">
+                            <option value="">Semua Status</option>
+                            @foreach(['pending','confirmed','cancelled','completed'] as $s)
+                                <option value="{{ $s }}" {{ request('status')==$s?'selected':'' }}>
+                                    {{ ucfirst($s) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </form>
 
                     <div class="table-responsive">
                         <table class="table table-striped table-hover" id="table1">

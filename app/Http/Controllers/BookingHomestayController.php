@@ -10,11 +10,25 @@ use Illuminate\Support\Facades\Storage;
 
 class BookingHomestayController extends Controller
 {
-    public function index()
-    {
-        $bookings = BookingHomestay::with('kamar.homestay', 'warga')->latest()->get();
-        return view('pages.booking-homestay.index', compact('bookings'));
+public function index(Request $request)
+{
+    $query = BookingHomestay::with('kamar.homestay', 'warga');
+
+    if ($request->search) {
+        $query->whereHas('warga', function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%');
+        });
     }
+
+    if ($request->status) {
+        $query->where('status', $request->status);
+    }
+
+    $bookings = $query->latest()->paginate(10)->withQueryString();
+
+    return view('pages.booking-homestay.index', compact('bookings'));
+}
+
 
     public function create()
     {

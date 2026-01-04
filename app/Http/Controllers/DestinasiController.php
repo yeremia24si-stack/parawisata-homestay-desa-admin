@@ -7,11 +7,24 @@ use Illuminate\Http\Request;
 
 class DestinasiController extends Controller
 {
-    public function index()
-    {
-        $data = Destinasi::latest()->paginate(10);
-        return view('pages.destinasi.index', compact('data'));
+public function index(Request $request)
+{
+    $query = Destinasi::query();
+
+    if ($request->search) {
+        $query->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('alamat', 'like', '%' . $request->search . '%');
     }
+
+    if ($request->tiket) {
+        $query->where('tiket', '<=', $request->tiket);
+    }
+
+    $data = $query->latest()->paginate(10)->withQueryString();
+
+    return view('pages.destinasi.index', compact('data'));
+}
+
 
     public function create()
     {

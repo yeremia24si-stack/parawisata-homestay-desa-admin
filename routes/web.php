@@ -42,9 +42,9 @@ Route::middleware(['auth', 'checkislogin'])->group(function () {
     | SUPER ADMIN ONLY - User Management
     |--------------------------------------------------------------------------
     */
-    
+    Route::middleware(['role:super admin'])->group(function () {
         Route::resource('user', UserController::class);
-    
+    });
 
     /*
     |--------------------------------------------------------------------------

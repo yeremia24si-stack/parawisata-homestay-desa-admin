@@ -9,11 +9,19 @@ use Illuminate\Support\Facades\Storage;
 
 class KamarHomestayController extends Controller
 {
-    public function index()
-    {
-        $kamars = KamarHomestay::with('homestay')->latest()->get();
-        return view('pages.kamar-homestay.index', compact('kamars'));
+public function index(Request $request)
+{
+    $query = KamarHomestay::with('homestay');
+
+    if ($request->search) {
+        $query->where('nama_kamar', 'like', '%' . $request->search . '%');
     }
+
+    $kamars = $query->latest()->paginate(10)->withQueryString();
+
+    return view('pages.kamar-homestay.index', compact('kamars'));
+}
+
 
     public function create()
     {

@@ -9,11 +9,23 @@ use Illuminate\Support\Facades\Storage;
 
 class HomestayController extends Controller
 {
-    public function index()
-    {
-        $homestays = Homestay::with('pemilik')->latest()->get();
-        return view('pages.homestay.index', compact('homestays'));
+public function index(Request $request)
+{
+    $query = Homestay::with('pemilik');
+
+    if ($request->search) {
+        $query->where('nama', 'like', '%' . $request->search . '%');
     }
+
+    if ($request->status) {
+        $query->where('status', $request->status);
+    }
+
+    $homestays = $query->latest()->paginate(10)->withQueryString();
+
+    return view('pages.homestay.index', compact('homestays'));
+}
+
 
     public function create()
     {

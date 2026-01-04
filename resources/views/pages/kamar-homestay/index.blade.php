@@ -20,6 +20,18 @@
                 </div>
             </div>
         </div>
+        <form method="GET" class="row g-2 mb-3">
+            <div class="col-md-9">
+                <input type="text" name="search" class="form-control"
+                    placeholder="Cari data..."
+                    value="{{ request('search') }}">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Cari
+                </button>
+            </div>
+        </form>
 
         <section class="section">
             <div class="card">

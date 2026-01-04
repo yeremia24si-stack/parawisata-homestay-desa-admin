@@ -211,7 +211,7 @@
 
         <div class="developer-card">
             <div class="text-center">
-                <img src="{{ asset('assets-admin/images/faces/1.jpg') }}"
+                <img src="{{ asset('assets-admin/images/faces/2.jpg') }}"
                      class="developer-photo"
                      alt="Foto Pengembang">
                 <br>

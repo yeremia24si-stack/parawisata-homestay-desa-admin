@@ -40,6 +40,19 @@
                     </a>
                 </div>
             </div>
+            <form method="GET" class="row g-2 mb-3">
+                <div class="col-md-5">
+                    <input type="text" name="search" class="form-control"
+                        placeholder="Cari destinasi..." value="{{ request('search') }}">
+                </div>
+                <div class="col-md-4">
+                    <input type="number" name="tiket" class="form-control"
+                        placeholder="Tiket maksimal" value="{{ request('tiket') }}">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
 
             <div class="card-body">
 
